@@ -1,0 +1,43 @@
+# -----------------------
+# Environment variables
+# -----------------------
+.env
+.env.*
+config.py
+
+# -----------------------
+# Uploads / runtime data
+# -----------------------
+uploads/
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
+# -----------------------
+# Python cache
+# -----------------------
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# -----------------------
+# Virtual environments
+# -----------------------
+venv/
+.venv/
+env/
+
+# -----------------------
+# OS / editor files
+# -----------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# -----------------------
+# Logs
+# -----------------------
+*.log

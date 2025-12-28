@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multimodal RAG Chatbot</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen flex items-center justify-center">
+
+<div class="w-full max-w-3xl bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+
+  <div class="mb-6">
+    <h1 class="text-xl font-semibold text-slate-900">
+      Multimodal RAG Chatbot
+    </h1>
+
+  </div>
+
+  
+  <div id="chat"
+       class="h-80 overflow-y-auto border border-slate-200 rounded-xl p-4 bg-slate-50 space-y-3 mb-5">
+  </div>
+
+ 
+  <div class="flex gap-3 mb-6">
+    <input
+      id="input"
+      class="flex-1 border border-slate-300 rounded-xl px-4 py-2.5 text-sm
+             focus:outline-none focus:ring-1 focus:ring-slate-400"
+      placeholder="Ask a question from your documents or images..."
+    />
+    <button
+      onclick="send()"
+      class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5
+             rounded-xl text-sm font-medium transition"
+    >
+      Send
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-slate-200 pt-5">
+
+   
+    <div class="rounded-xl border border-slate-200 p-4 bg-white">
+      <h3 class="text-sm font-medium text-slate-800 mb-3">
+        Upload PDF
+      </h3>
+      <div class="flex gap-2">
+        <input type="file" id="pdfInput" accept=".pdf"
+               class="flex-1 text-xs text-slate-600" />
+        <button
+          onclick="uploadPDF()"
+          class="bg-slate-700 hover:bg-slate-800 text-white px-4 rounded-lg
+                 text-xs font-medium transition"
+        >
+          Upload
+        </button>
+      </div>
+    </div>
+
+   
+    <div class="rounded-xl border border-slate-200 p-4 bg-white">
+      <h3 class="text-sm font-medium text-slate-800 mb-3">
+        Upload Image (OCR)
+      </h3>
+      <div class="flex gap-2">
+        <input type="file" id="imageInput" accept="image/*"
+               class="flex-1 text-xs text-slate-600" />
+        <button
+          onclick="uploadImage()"
+          class="bg-slate-700 hover:bg-slate-800 text-white px-4 rounded-lg
+                 text-xs font-medium transition"
+        >
+          Upload
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+const chat = document.getElementById("chat");
+
+function addMessage(sender, text, type="bot") {
+  const wrapper = document.createElement("div");
+  const isUser = sender === "You";
+
+  wrapper.className = `flex ${isUser ? "justify-end" : "justify-start"}`;
+
+  const bubble = document.createElement("div");
+  bubble.className = `
+    max-w-[80%] px-4 py-2 rounded-xl text-sm
+    ${isUser 
+      ? "bg-slate-900 text-white" 
+      : "bg-white border border-slate-200 text-slate-800"}
+  `;
+
+  bubble.innerHTML = `<span class="font-medium">${sender}:</span> ${text}`;
+  wrapper.appendChild(bubble);
+  chat.appendChild(wrapper);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+async function send() {
+  const input = document.getElementById("input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage("You", text, "user");
+  input.value = "";
+
+  const res = await fetch("/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ query: text })
+  });
+
+  const data = await res.json();
+  addMessage("Bot", data.answer);
+}
+
+async function uploadPDF() {
+  const file = document.getElementById("pdfInput").files[0];
+  if (!file) return alert("Select a PDF file.");
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await fetch("/upload/pdf", { method: "POST", body: formData });
+  addMessage("System", "PDF indexed successfully.");
+}
+
+async function uploadImage() {
+  const file = document.getElementById("imageInput").files[0];
+  if (!file) return alert("Select an image.");
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  await fetch("/upload/image", { method: "POST", body: formData });
+  addMessage("System", "Image indexed using OCR.");
+}
+</script>
+
+</body>
+</html>
