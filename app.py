@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify, render_template
 from groq import Groq
-from config import GROQ_API_KEY, MODEL_NAME
-
 from rag_store import ingest_pdf, retrieve_context
 from image_ingest import ingest_image, last_extracted_text
-
 import os
+
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+MODEL_NAME = os.getenv("MODEL_NAME", "llama-3.1-8b-instant")
 
 app = Flask(__name__)
 client = Groq(api_key=GROQ_API_KEY)
