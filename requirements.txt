@@ -1,0 +1,8 @@
+flask
+groq
+faiss-cpu
+sentence-transformers
+pytesseract
+pillow
+pypdf
+python-dotenv
