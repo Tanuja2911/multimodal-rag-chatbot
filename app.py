@@ -52,7 +52,7 @@ def chat():
     if tool == "RAG_SEARCH":
         context = retrieve_context(query)
 
-        # 🔁 FALLBACK TO NORMAL CHAT IF CONTEXT IS WEAK
+
         if not context or len(context.strip()) < 50:
             messages = [
                 {
