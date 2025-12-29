@@ -1,20 +1,20 @@
 
----
 
-#  Multimodal RAG Chatbot
+# Multimodal RAG Chatbot
 
 This project implements a **Multimodal Retrieval-Augmented Generation (RAG) chatbot** that supports **text, PDF, and image inputs**. PDF documents and images are processed to extract textual content, which is indexed in a **vector database** for semantic retrieval. User queries are answered by a **large language model (LLM)** using only the retrieved context, ensuring **grounded, accurate, and reliable responses**.
-
-
 
 ---
 
 ## ⚙️ Setup Instructions
 
+> **Note:** Python **3.11.x (recommended: 3.11.9)** is required.
+> Python 3.12 / 3.13 may cause incompatibility with some ML libraries.
+
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/multimodal-rag-chatbot.git
+git clone https://github.com/Tanuja2911/multimodal-rag-chatbot.git
 cd multimodal-rag-chatbot
 ```
 
@@ -25,15 +25,22 @@ cd multimodal-rag-chatbot
 **Windows**
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\activate
 ```
 
 **Linux / macOS**
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Verify Python version:
+
+```bash
+python --version
+# Expected: Python 3.11.x
 ```
 
 ---
